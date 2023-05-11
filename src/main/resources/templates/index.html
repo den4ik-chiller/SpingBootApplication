@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Система работы с документами</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="bg-image"
+     style="background-image: url('https://images.squarespace-cdn.com/content/v1/5b4e6b87266c074121c335e9/1631390556524-7OO1C37JONJGUA23340P/SASS+Sales+Banners+%2833%29.png'); height: 100vh; overflow-x: hidden">
+    <div class="container">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <a  class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                <span class="fs-4" style="color: #000000">Система работы с документами</span>
+            </a>
+
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a th:href="@{/employee}" class="nav-link" aria-current="page" style="color: #000000">Сотрудники</a></li>
+                <li class="nav-item"><a th:href="@{/}" class="nav-link" style="color: #000000">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="grey" class="bi bi-house-fill" viewBox="0 0 16 16">
+                        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+                        <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+                    </svg>Документы</a></li>
+                <li class="nav-item"><a th:href="@{/aboutMe}" class="nav-link" aria-current="page" style="color: #000000">Об авторе</a></li>
+                <li class="nav-item"><a th:href="@{/reg_admin}" class="nav-link active" style="color: #e9f4fb; background-color: #78cc48; border-radius: 10px;" sec:authorize="hasRole('ADMIN')">Зарегистрировать пользователя</a></li>
+                <li class="nav-item"><a th:href="@{/logout}" class="nav-link active" style="color: #e9f4fb; background-color: #ed0606; border-radius: 10px;">Выйти</a></li>
+                <li class="nav-item"><a class= "nav-link" style="color: #000000;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"></path>
+                </svg><th:block th:with="username=${#authentication.getName()}">
+                    <span th:text="${username}"></span></th:block></a></li>
+            </ul>
+        </header>
+    </div>
+    <div class="row">
+        <div class="col-md-8 offset-md-4">
+            <h4>Поиск документа по любому критерию:</h4>
+            <form th:action="@{/}" id="findAll">
+                <input type="text" name="keyword" id="keyword" size="70" class="input_field" oninput="submitForm(event)"
+                       th:value="${keyword}" required/>
+                <input type="hidden" id="fullId" th:value="${inputId}">
+                <input type="button" class="btn btn-warning btn-sm" value="Очистить" id="btnClear1"
+                       onclick="clearSearch()"/>
+            </form>
+        </div>
+    </div>
+    <table id="1" class="table table-striped table-hover table-bordered">
+        <thead>
+        <tr>
+            <th></th>
+            <th>
+                <form th:action="@{/searchDocName}" id="docName" style="text-align: center">
+                    <input type="text" name="keywordDocName" id="keywordDocName" class="input_field" size="10"
+                           oninput="submitForm(event)" th:value="${keywordDocName}" required/>
+                    <input type="hidden" id="myNameId" th:value="${inputId}">
+                </form>
+            </th>
+            <th>
+                <form th:action="@{/searchRegistrationDate}" id="regDate" style="text-align: center">
+                    <input type="text" name="keywordRegistrationDate" id="keywordRegistrationDate" class="input_field"
+                           oninput="submitForm(event)" size="10" th:value="${keywordRegistrationDate}" required/>
+                    <input type="hidden" id="myRegId" th:value="${inputId}">
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/searchCategory}" id="category" style="text-align: center">
+                    <input type="text" name="keywordCategory" id="keywordCategory" class="input_field" size="10"
+                           oninput="submitForm(event)" th:value="${keywordCategory}" required/>
+                    <input type="hidden" id="myCategory" th:value="${inputId}">
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/searchDocNumber}" id="docNumber" style="text-align: center">
+                    <input type="text" name="keywordDocNumber" id="keywordDocNumber" class="input_field" size="3"
+                           oninput="submitForm(event)" th:value="${keywordDocNumber}" required/>
+                    <input type="hidden" id="myNumber" th:value="${inputId}">
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/searchDocDescription}" id="docDesc" style="text-align: center">
+                    <input type="text" name="keywordDocDescription" id="keywordDocDescription" class="input_field"
+                           size="10" oninput="submitForm(event)" th:value="${keywordDocDescription}" required/><br>
+                    <input type="hidden" id="myDesc" th:value="${inputId}">
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/searchAuthor}" id="author" style="text-align: center">
+                    <input type="text" name="keywordAuthor" id="keywordAuthor" class="input_field" size="10"
+                           oninput="submitForm(event)" th:value="${keywordAuthor}" required/>
+                    <input type="hidden" id="myAuthor" th:value="${inputId}">
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/searchAuthorId}" id="author_id" style="text-align: center">
+                    <input type="text" name="keywordAuthorId" id="keywordAuthorId" class="input_field" size="5"
+                           oninput="submitForm(event)" th:value="${keywordAuthorId}" required/>
+                    <input type="hidden" id="myAuthorId" th:value="${inputId}">
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/searchRecipient}" id="recipient" style="text-align: center">
+                    <input type="text" name="keywordRecipient" id="keywordRecipient" class="input_field" size="10"
+                           oninput="submitForm(event)" th:value="${keywordRecipient}" required/>
+                    <input type="hidden" id="myRecipient" th:value="${inputId}">
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/searchDocFile}" id="docFile" style="text-align: center">
+                    <input type="text" name="keywordDocFile" id="keywordDocFile" class="input_field" size="10"
+                           oninput="submitForm(event)" th:value="${keywordDocFile}" required/>
+                    <input type="hidden" id="myFile" th:value="${inputId}">
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/searchCondition}" id="condition" style="text-align: center">
+                    <input type="text" name="keywordCondition" id="keywordCondition" class="input_field" size="10"
+                           oninput="submitForm(event)" th:value="${keywordCondition}" required/>
+                    <input type="hidden" id="myCond" th:value="${inputId}">
+                </form>
+            </th>
+        </tr>
+        <tr>
+            <th scope="col" style="text-align: center">ID</th>
+            <th scope="col" style="text-align: center">Название</th>
+            <th scope="col" onclick="sortRegDate()" class="change-text" style="text-align: center">Дата регистрации</th>
+            <th scope="col" onclick="sortCategory()" class="change-text" style="text-align: center">Категория</th>
+            <th scope="col" style="text-align: center">Номер</th>
+            <th scope="col" style="text-align: center">Описание</th>
+            <th scope="col" onclick="sortAuthor()" class="change-text" style="text-align: center">Автор</th>
+            <th scope="col" style="text-align: center">ID автора</th>
+            <th scope="col" onclick="sortRecipient()" class="change-text" style="text-align: center">Получатель</th>
+            <th scope="col" style="text-align: center">Файл</th>
+            <th scope="col" style="text-align: center">Состояние</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="doc: ${listDoc}">
+            <th scope="row" class="text-black" th:text="${doc.id}">ID документа отстутсвует</th>
+            <th scope="row" class="text-black" th:text="${doc.doc_name}">Название документа отстутсвует</th>
+            <th scope="row" class="text-black" th:text="${doc.registration_date}">Дата регистрации документа
+                отстутсвует</th>
+            <th scope="row" class="text-black" th:text="${doc.category}">Категория документа отстутсвует</th>
+            <th scope="row" class="text-black" th:text="${doc.doc_number}">Номер документа отстутсвует</th>
+            <th scope="row" class="text-black" th:text="${doc.doc_description}">Описание документа отстутсвует</th>
+            <th scope="row" class="text-black" th:text="${doc.author}">Автор документа отстутсвует</th>
+            <th scope="row" class="text-black" th:text="${doc.author_id}">ID автора отсутствует</th>
+            <th scope="row" class="text-black" th:text="${doc.recipient}">Получатель документа отстутсвует</th>
+            <th scope="row" class="text-black"><a id="fileLink" th:href="${doc.doc_file}" target="_blank"></a></th>
+            <th scope="row" class="text-black" th:text="${doc.doc_condition}">Состояние отстутсвует</th>
+            <td>
+                <a th:href="@{'/edit/'+${doc.id}}">
+                    <button type="button" class="btn btn-info" sec:authorize="hasRole('ADMIN')">Редактировать</button>
+                </a>
+                <a th:href="@{'/delete/'+${doc.id}}">
+                    <button type="button" class="btn btn-danger" sec:authorize="hasRole('ADMIN')">Удалить
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                        </svg></button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="text-green">
+        <script type="text/javascript">
+            function getRowsColumn() {
+                function givemecolor(thecolor, thetext) {
+                    return '<span style="color:' + thecolor + '">' + thetext + '</span>';
+                }
+
+                let table = document.getElementById('1')
+                let tBody = table.querySelector('tbody')
+                const count = tBody.querySelectorAll('tr').length
+                document.write(givemecolor('#090431', 'Количество документов в таблице: ' + count))
+            }
+
+            getRowsColumn()
+        </script>
+    </p>
+    <blockquote class="blockquote text-center">
+        <a href="/new">
+            <button type="button" class="btn btn-primary" data-togge="button" aria-pressed="false" autocomplete="off" sec:authorize="hasRole('ADMIN')">
+                Добавить документ
+            </button>
+        </a>
+    </blockquote>
+    <table style="margin: 0 auto; width: 50%" id="2" class="table">
+        <script type="text/javascript">
+            function dctRegDate() {
+                // Получаем ссылку на таблицу
+                let mainTable = document.getElementById('1');
+
+                // Получаем ссылки на ячейки столбца с датами регистрации
+                let cells = Array.from(mainTable.querySelectorAll("tbody th:nth-child(3)"));
+                for (let j = 0; j < cells.length; j++) {
+                    cells[j] = cells[j].textContent;
+                }
+                cells.sort();
+
+                // Создаем объект, который будет содержать количество дат
+                let dateCounts = {};
+
+                for (let i = 0; i < cells.length; i++) {
+                    let datetime = cells[i];
+                    dateCounts[datetime] = (dateCounts[datetime] || 0) + 1;
+                }
+                // Создаем массивы с данными для гистограммы
+                let labels = Object.keys(dateCounts);
+                let data = Object.values(dateCounts);
+
+                let tableReg = document.createElement('table');
+                tableReg.classList.add('table', 'table-striped', 'table-hover', 'table-bordered')
+                let thead = document.createElement('thead');
+                tableReg.appendChild(thead)
+                let tr = document.createElement('tr');
+                tableReg.appendChild(tr)
+
+                const th1 = document.createElement('th');
+                th1.textContent = 'Дата регистрации';
+                tr.appendChild(th1);
+
+                const th2 = document.createElement('th');
+                th2.textContent = 'Количество документов';
+                tr.appendChild(th2);
+
+                let tbody = document.createElement('tbody');
+                tableReg.appendChild(tbody);
+
+
+                for (let i = 0; i < data.length; i++) {
+                    const tr = document.createElement('tr');
+                    tbody.appendChild(tr);
+
+                    const td1 = document.createElement('td');
+                    td1.textContent = labels[i];
+                    tr.appendChild(td1);
+
+                    const td2 = document.createElement('td');
+                    td2.textContent = data[i];
+                    tr.appendChild(td2);
+                }
+                let t = document.getElementById('2');
+                t.appendChild(tableReg);
+            }
+
+            dctRegDate()
+        </script>
+    </table>
+    <div style="background-color: rgba(255,255,255,0.2)">
+        <canvas id="myChart" height="70%"></canvas>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    // отвечает за перемещение курсора в конец при обновлении страницы при поиске, вопрос, почему без разницы какой id в getElementById
+    window.onload = function () {
+        let inputId = document.getElementById("myNameId").value;
+        document.getElementById(inputId).focus();
+        document.getElementById(inputId).setSelectionRange(document.getElementById(inputId).value.length, document.getElementById(inputId).value.length);
+    }
+</script>
+<script>
+        let links = document.querySelectorAll("#fileLink");
+        links.forEach(function(link) {
+            link.textContent = findName(link.href);
+        });
+    function findName(name) {
+        return name.split("=")[2];
+    }
+</script>
+
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/}]]";
+    }
+
+    function submitForm(event) {
+        // document.getElementById("keywordDocName").addEventListener("input", function() {
+        //   document.getElementById("docName").submit();
+        // })
+        let formId = event.target.form.id;
+        document.getElementById(formId).submit();
+    }
+
+    function sortCategory() {
+        // Получаем заголовок колонки "Автор"
+        let mainTable = document.getElementById('1')
+        const recipient = mainTable.querySelector('tr:nth-child(2) th:nth-child(9)')
+        const author = mainTable.querySelector('tr:nth-child(2) th:nth-child(7)')
+        const category = mainTable.querySelector('tr:nth-child(2) th:nth-child(4)')
+        const reg_date = mainTable.querySelector('tr:nth-child(2) th:nth-child(3)')
+        // Получаем все строки таблицы
+        const rows = Array.from(mainTable.querySelectorAll('tbody tr'));
+        // Определяем порядок сортировки (возрастание или убывание)
+        const ascending = category.dataset.order === 'asc';
+
+        // Сортируем строки таблицы в соответствии с выбранным порядком
+        const sortedRows = rows.sort((a, b) => {
+            const aValue = a.cells[3].textContent;
+            const bValue = b.cells[3].textContent;
+            return ascending ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+        });
+
+        // Поменяем порядок строк в таблице
+        const tbody = mainTable.querySelector('tbody');
+        sortedRows.forEach(row => tbody.insertBefore(row, null));
+
+        // Изменяем порядок сортировки при повторном клике на заголовке колонки
+        category.dataset.order = ascending ? 'desc' : 'asc';
+        reg_date.textContent = "Дата регистрации"
+        recipient.textContent = "Получатель"
+        author.textContent = "Автор"
+        category.textContent = "Категория" + (ascending ? "▼" : "▲");
+        category.style.color = "blue"
+        reg_date.style.color = "black"
+        author.style.color = "black"
+        recipient.style.color = "black"
+    }
+
+    function sortAuthor() {
+        // Получаем заголовок колонки "Автор"
+        let mainTable = document.getElementById('1')
+        const recipient = mainTable.querySelector('tr:nth-child(2) th:nth-child(9)')
+        const author = mainTable.querySelector('tr:nth-child(2) th:nth-child(7)')
+        const category = mainTable.querySelector('tr:nth-child(2) th:nth-child(4)')
+        const reg_date = mainTable.querySelector('tr:nth-child(2) th:nth-child(3)')
+        // Получаем все строки таблицы
+        const rows = Array.from(mainTable.querySelectorAll('tbody tr'));
+        // Определяем порядок сортировки (возрастание или убывание)
+        const ascending = author.dataset.order === 'asc';
+
+        // Сортируем строки таблицы в соответствии с выбранным порядком
+        const sortedRows = rows.sort((a, b) => {
+            const aValue = a.cells[6].textContent;
+            const bValue = b.cells[6].textContent;
+            return ascending ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+        });
+
+        // Поменяем порядок строк в таблице
+        const tbody = mainTable.querySelector('tbody');
+        sortedRows.forEach(row => tbody.insertBefore(row, null));
+
+        // Изменяем порядок сортировки при повторном клике на заголовке колонки
+        author.dataset.order = ascending ? 'desc' : 'asc';
+        reg_date.textContent = "Дата регистрации"
+        recipient.textContent = "Получатель"
+        category.textContent = "Категория"
+        author.textContent = "Автор" + (ascending ? "▼" : "▲");
+        author.style.color = "blue"
+        reg_date.style.color = "black"
+        category.style.color = "black"
+        recipient.style.color = "black"
+    }
+
+    function sortRecipient() {
+        // Получаем заголовок колонки "Автор"
+        let mainTable = document.getElementById('1')
+        const recipient = mainTable.querySelector('tr:nth-child(2) th:nth-child(9)')
+        const author = mainTable.querySelector('tr:nth-child(2) th:nth-child(7)')
+        const category = mainTable.querySelector('tr:nth-child(2) th:nth-child(4)')
+        const reg_date = mainTable.querySelector('tr:nth-child(2) th:nth-child(3)')
+        // Получаем все строки таблицы
+        const rows = Array.from(mainTable.querySelectorAll('tbody tr'));
+        // Определяем порядок сортировки (возрастание или убывание)
+        const ascending = recipient.dataset.order === 'asc';
+
+        // Сортируем строки таблицы в соответствии с выбранным порядком
+        const sortedRows = rows.sort((a, b) => {
+            const aValue = a.cells[8].textContent;
+            const bValue = b.cells[8].textContent;
+            return ascending ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+        });
+
+        // Поменяем порядок строк в таблице
+        const tbody = mainTable.querySelector('tbody');
+        sortedRows.forEach(row => tbody.insertBefore(row, null));
+
+        // Изменяем порядок сортировки при повторном клике на заголовке колонки
+        recipient.dataset.order = ascending ? 'desc' : 'asc';
+        reg_date.textContent = "Дата регистрации"
+        author.textContent = "Автор"
+        category.textContent = "Категория"
+        recipient.textContent = "Получатель" + (ascending ? "▼" : "▲");
+        recipient.style.color = "blue"
+        reg_date.style.color = "black"
+        author.style.color = "black"
+        category.style.color = "black"
+    }
+
+    function sortRegDate() {
+        // Получаем заголовок колонки "Дата регистрации"
+        let mainTable = document.getElementById('1')
+        const recipient = mainTable.querySelector('tr:nth-child(2) th:nth-child(9)')
+        const author = mainTable.querySelector('tr:nth-child(2) th:nth-child(7)')
+        const category = mainTable.querySelector('tr:nth-child(2) th:nth-child(4)')
+        const reg_date = mainTable.querySelector('tr:nth-child(2) th:nth-child(3)')
+        // Получаем все строки таблицы
+        const rows = Array.from(mainTable.querySelectorAll('tbody tr'));
+        // Определяем порядок сортировки (возрастание или убывание)
+        const ascending = reg_date.dataset.order === 'asc';
+
+        // Сортируем строки таблицы в соответствии с выбранным порядком
+        const sortedRows = rows.sort((a, b) => {
+            const aValue = new Date(a.cells[2].textContent).getTime();
+            const bValue = new Date(b.cells[2].textContent).getTime();
+            return ascending ? aValue - bValue : bValue - aValue;
+        });
+
+        // Поменяем порядок строк в таблице
+        const tbody = mainTable.querySelector('tbody');
+        sortedRows.forEach(row => tbody.insertBefore(row, null));
+
+        // Изменяем порядок сортировки при повторном клике на заголовке колонки
+        reg_date.dataset.order = ascending ? 'desc' : 'asc';
+        author.textContent = "Автор"
+        recipient.textContent = "Получатель"
+        category.textContent = "Категория"
+        reg_date.textContent = "Дата регистрации " + (ascending ? "▲" : "▼");
+        reg_date.style.color = "blue"
+        category.style.color = "black"
+        author.style.color = "black"
+        recipient.style.color = "black"
+    }
+</script>
+
+<script type="text/javascript">
+    // Получаем ссылку на таблицу
+    let table = document.getElementById('1');
+
+    // Получаем ссылки на ячейки столбца с датами отгрузки
+    let cells = Array.from(table.querySelectorAll("tbody th:nth-child(3)"));
+    for (let j = 0; j < cells.length; j++) {
+        cells[j] = cells[j].textContent;
+    }
+    cells.sort();
+    // Создаем объект, который будет содержать количество дат
+    let dateCounts = {};
+
+    for (let i = 0; i < cells.length; i++) {
+        let datetime = cells[i];
+        dateCounts[datetime] = (dateCounts[datetime] || 0) + 1;
+    }
+
+    // Создаем массивы с данными для гистограммы
+    let labels = Object.keys(dateCounts);
+    let data = Object.values(dateCounts);
+
+    function randomColor() {
+        var letters = "0123456789ABCDEF";
+        var color = "#";
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    var backgroundColors = [];
+    for (var i = 0; i < data.length; i++) {
+        backgroundColors.push(randomColor());
+    }
+    let ctx = document.getElementById("myChart");
+    let chart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Количество документов по дате регистрации",
+                data: data,
+                backgroundColor: backgroundColors,
+            }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    barPercentage: 0.5
+                }],
+
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function (value) {
+                            if (value % 1 === 0) {
+                                return value;
+                            }
+                        }
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

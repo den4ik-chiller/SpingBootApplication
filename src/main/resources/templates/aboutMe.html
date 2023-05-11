@@ -1,0 +1,176 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+
+    <title>Об авторе</title>
+
+
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Fjalla+One);
+        @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+        @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            font-family: "Fjalla One", sans-serif;
+            background: linear-gradient(to bottom, #405166 0%, #656f6f 100%);
+        }
+
+        .container {
+            transform: translate(-50%, -50%);
+            top: 30%;
+            left: 50%;
+            display: block;
+            position: absolute;
+            max-width: 270px;
+        }
+
+        .button {
+            float: left;
+            position: relative;
+            bottom: -65px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-10deg);
+            color: #e55643;
+            text-transform: uppercase;
+            opacity: 0;
+            visibility: hidden;
+            cursor: pointer;
+        }
+        .button span {
+            transform: skew(-10deg);
+            display: block;
+            float: left;
+            text-shadow: #533d4a 1px 1px, #533d4a 2px 2px, #533d4a 3px 3px, #533d4a 4px 4px;
+        }
+
+        h1 {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 42px;
+            margin: 0;
+            line-height: 47px;
+            letter-spacing: 2px;
+        }
+
+        .title {
+            transform: translateX(-50%) rotate(-10deg);
+            display: block;
+            float: left;
+            left: 50%;
+            position: relative;
+        }
+        .title span {
+            transform: skew(-10deg);
+            display: flex;
+            float: left;
+            text-shadow: #533d4a 1px 5px, #533d4a 2px 2px, #533d4a 3px 3px, #533d4a 4px 4px, #533d4a 5px 5px, #533d4a 6px 6px;
+            min-width: 15px;
+            min-height: 10px;
+            position: relative;
+        }
+
+        .title:nth-child(1) {
+            color: #e55643;
+        }
+        .title:nth-child(2) {
+            color: #2b9f5e;
+        }
+        .title:nth-child(3) {
+            color: #f1c83c;
+        }
+        .aboutMe{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .links{
+            display: flex;
+            gap: 0px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: fixed;
+            top: 250px;
+            bottom: 10px;
+            left: 0;
+            right: 40px;
+            font-family: "Bungee", cursive;
+        }
+
+
+        a {
+            color: #2aa7cc;
+            text-decoration: none;
+        }
+        a:hover {
+            color: white;
+        }
+    </style>
+
+    <script>
+        window.console = window.console || function(t) {};
+    </script>
+</head>
+
+<section class="container">
+    <h1>
+        <span class="title" aria-label="А теперь"><span class="char1" aria-hidden="true" style="bottom: 0px; opacity: 1;">Т</span><span class="char3" aria-hidden="true" style="bottom: 0px; opacity: 1;">е</span><span class="char4" aria-hidden="true" style="bottom: 0px; opacity: 1;">п</span><span class="char5" aria-hidden="true" style="bottom: 0px; opacity: 1;"></span><span class="char6" aria-hidden="true" style="bottom: 0px; opacity: 1;">е</span><span class="char7" aria-hidden="true" style="bottom: 0px; opacity: 1;">р</span><span class="char7" aria-hidden="true" style="bottom: 0px; opacity: 1;">ь</span></span>
+        <span class="title" aria-label="немного"><span class="char1" aria-hidden="true" style="bottom: 0px; opacity: 1;">н</span><span class="char2" aria-hidden="true" style="bottom: 0px; opacity: 1;">е</span><span class="char3" aria-hidden="true" style="bottom: 0px; opacity: 1;">м</span><span class="char4" aria-hidden="true" style="bottom: 0px; opacity: 1;">н</span><span class="char5" aria-hidden="true" style="bottom: 0px; opacity: 1;">о</span><span class="char6" aria-hidden="true" style="bottom: 0; opacity: 1;">г</span><span class="char7" aria-hidden="true" style="bottom: 0px; opacity: 1;">о</span></span>
+        <span class="title" aria-label="об авторе"><span class="char1" aria-hidden="true" style="bottom: 0px; opacity: 1;">О</span><span class="char2" aria-hidden="true" style="bottom: 0px; opacity: 1;">б</span><span class="char3" aria-hidden="true" style="bottom: 0px; opacity: 1;"> </span><span class="char4" aria-hidden="true" style="bottom: 0px; opacity: 1;">а</span><span class="char5" aria-hidden="true" style="bottom: 0px; opacity: 1;">в</span><span class="char6" aria-hidden="true" style="bottom: 0px; opacity: 1;">т</span><span class="char7" aria-hidden="true" style="bottom: 0px; opacity: 1;">о</span><span class="char8" aria-hidden="true" style="bottom: 0px; opacity: 1;">р</span><span class="char9" aria-hidden="true" style="bottom: 0px; opacity: 1;">е</span</span>
+    </h1>
+</section>
+<h3 class="aboutMe" style="color: #9ac2d3">Я, Парамонов Денис, студент группы ПИ21-3, выполнил данный проект: "Автоматизированная система регистарции документов"</h3>
+<ul class="links">
+    <h3 class="gitLink"><a href="https://github.com/den4ik-chiller">GitHub</a></h3>
+    <h3 class="instLink"><a href="https://instagram.com/den4ik_chiller_?igshid=ZDdkNTZiNTM=">Instagram</a></h3>
+    <h3 class="vkLink"><a href="https://vk.com/serial_4iller">VK</a></h3>
+    <h3 class="vkLink"><a href="https://t.me/serial_chilleer">Telegram</a></h3>
+
+</ul>
+
+<script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lettering.js/0.7.0/jquery.lettering.min.js"></script>
+<script id="rendered-js">
+    $(document).ready(function () {
+        $(".title").lettering();
+        $(".button").lettering();
+    });
+
+
+    $(document).ready(function () {
+        animation();
+    }, 1000);
+
+    $('.button').click(function () {
+        animation();
+    });
+
+
+    function animation() {
+        var title1 = new TimelineMax();
+        title1.to(".button", 0, { visibility: 'hidden', opacity: 0 });
+        title1.staggerFromTo(".title span", 0.5,
+            { ease: Back.easeOut.config(1.7), opacity: 0, bottom: -80 },
+            { ease: Back.easeOut.config(1.7), opacity: 1, bottom: 0 }, 0.05);
+        title1.to(".button", 0.2, { visibility: 'visible', opacity: 1 });
+    }
+</script>
+
+
+
+
+</body></html>

@@ -1,0 +1,30 @@
+.change-text:hover{
+    color: #ed0606;
+    cursor: pointer;
+}
+.text-black{
+    text-align: center;
+}
+.btn-info{
+    background-color: #a9c5e9;
+}
+
+.btn-danger{
+    background-color: #ed0606;
+}
+
+.btn-primary{
+    background-color: #399906;
+}
+
+.btn-warning{
+    background-color: #e9971c;
+}
+
+.input_field{
+    border-radius: 10px;
+}
+
+.btn{
+    border-radius: 10px;
+}
